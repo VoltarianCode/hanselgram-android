@@ -1,8 +1,9 @@
 package app.voltarian.hanselgram;
 
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.parse.ParseAnalytics;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,6 +15,6 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         setContentView(R.layout.activity_main);
 
-
+        ParseAnalytics.trackAppOpenedInBackground(getIntent());
     }
 }
