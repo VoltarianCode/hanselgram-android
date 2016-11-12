@@ -35,30 +35,9 @@ public class StarterApplication extends Application {
                 .build()
         );
 
-        /*
-
-        ParseObject object = new ParseObject("Example");
-
-        //will make an object with a column name aString and will
-        // add 'hanselgram is coming' to that column in the new object
-
-        object.put("aString", "hanselgram is coming");
-
-        object.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException ex) {
-                if (ex == null) {
-                    Log.i("Parse Result", "Successful!");
-                } else {
-                    Log.i("Parse Result", "Failed" + ex.toString());
-                }
-            }
-        });
-
-        */
 
 
-        ParseUser.enableAutomaticUser();
+        //ParseUser.enableAutomaticUser();
 
         ParseACL defaultACL = new ParseACL();
         defaultACL.setPublicReadAccess(true);
