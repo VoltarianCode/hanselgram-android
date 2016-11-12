@@ -22,25 +22,26 @@ import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
-import butterknife.ButterKnife;
-import butterknife.Bind;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
+    EditText _usernameText;
+    EditText _passwordText;
+    Button _loginButton;
+    TextView _signupLink;
 
-    @Bind(R.id.login_username) AppCompatEditText _usernameText;
-    @Bind(R.id.input_password) AppCompatEditText _passwordText;
-    @Bind(R.id.btn_login) Button _loginButton;
-    @Bind(R.id.link_signup) TextView _signupLink;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        ButterKnife.bind(this);
 
 
+        _usernameText = (EditText) findViewById(R.id.login_username);
+        _passwordText = (EditText) findViewById(R.id.login_password);
+        _loginButton = (Button) findViewById(R.id.btn_login);
+        _signupLink = (TextView) findViewById(R.id.link_signup);
 
         _passwordText.setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -141,7 +142,10 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onLoginSuccess() {
         _loginButton.setEnabled(true);
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
         finish();
+        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
     }
 
     public void onLoginFailed() {

@@ -97,14 +97,17 @@ public class MainActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(MainActivity.this,
                 R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Uploading Image...");
+        progressDialog.setMessage("Loading Resources...");
 
 
         if (!authenticated && ParseUser.getCurrentUser() == null){
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-        } else {
+        }
+
+
+        if (ParseUser.getCurrentUser() != null && authenticated) {
             final ListView userListView = (ListView) findViewById(R.id.user_listview);
 
             userListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -117,11 +120,13 @@ public class MainActivity extends AppCompatActivity {
             });
             ParseQuery<ParseUser> query = ParseUser.getQuery();
 
-            final ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,users);
+            final ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, users);
 
             //query.whereNotEqualTo("username", ParseUser.getCurrentUser().getUsername());
 
             query.addAscendingOrder("username");
+
+            progressDialog.show();
 
             query.findInBackground(new FindCallback<ParseUser>() {
                 @Override
@@ -134,13 +139,11 @@ public class MainActivity extends AppCompatActivity {
                         }
                         userListView.setAdapter(arrayAdapter);
                     }
+                    progressDialog.dismiss();
                 }
             });
 
-
         }
-
-
 
 
         ParseAnalytics.trackAppOpenedInBackground(getIntent());

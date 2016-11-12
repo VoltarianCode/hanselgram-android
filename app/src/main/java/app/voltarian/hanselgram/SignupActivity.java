@@ -25,32 +25,31 @@ import com.parse.SignUpCallback;
 
 import java.util.List;
 
-import butterknife.ButterKnife;
-import butterknife.Bind;
+
 
 public class SignupActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "SignupActivity";
     boolean valid;
 
 
-    @Bind(R.id.sign_up_username)
-    AppCompatEditText _userNameText;
-    @Bind(R.id.input_email)
-    AppCompatEditText _emailText;
-    @Bind(R.id.input_password)
-    AppCompatEditText _passwordText;
-    @Bind(R.id.input_reEnterPassword)
-    AppCompatEditText _reEnterPasswordText;
-    @Bind(R.id.btn_signup)
+    EditText _userNameText;
+    EditText _emailText;
+    EditText _passwordText;
+    EditText _reEnterPasswordText;
     Button _signupButton;
-    @Bind(R.id.link_login)
     TextView _loginLink;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-        ButterKnife.bind(this);
+
+        _userNameText = (EditText) findViewById(R.id.sign_up_username);
+        _emailText = (EditText) findViewById(R.id.signup_email);
+        _passwordText = (EditText) findViewById(R.id.signup_password);
+        _reEnterPasswordText = (EditText) findViewById(R.id.signup_reEnterPassword);
+        _signupButton = (Button) findViewById(R.id.btn_signup);
+        _loginLink = (TextView) findViewById(R.id.link_login);
 
 
         _signupButton.setOnClickListener(new View.OnClickListener() {
@@ -128,6 +127,8 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     public void onSignupSuccess() {
         _signupButton.setEnabled(true);
         setResult(RESULT_OK, null);
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
         finish();
         overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
     }

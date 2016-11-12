@@ -48,7 +48,7 @@
             android:layout_marginTop="2dp">
 
             <EditText
-                android:id="@+id/input_email"
+                android:id="@+id/signup_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Email"
@@ -65,7 +65,7 @@
             android:layout_marginTop="2dp">
 
             <EditText
-                android:id="@+id/input_password"
+                android:id="@+id/signup_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Password"
@@ -81,7 +81,7 @@
             android:layout_marginTop="2dp">
 
             <EditText
-                android:id="@+id/input_reEnterPassword"
+                android:id="@+id/signup_reEnterPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Re-enter Password"
