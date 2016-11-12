@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         if (!authenticated){
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
+            overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
         }
 
 

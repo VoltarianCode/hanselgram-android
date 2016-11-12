@@ -8,12 +8,14 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/linear_layout_login"
         android:paddingTop="56dp"
         android:paddingLeft="24dp"
         android:paddingRight="24dp">
 
         <ImageView android:src="@drawable/logo"
             android:layout_width="wrap_content"
+            android:id="@+id/logo_login"
             android:layout_height="72dp"
             android:layout_marginBottom="24dp"
             android:layout_gravity="center_horizontal" />
@@ -50,20 +52,24 @@
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_login"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:textColor="@color/white"
             android:layout_marginBottom="24dp"
-            android:padding="12dp"
-            android:text="Login"/>
+            android:text="Login"
+            android:paddingBottom="12dp"
+            android:paddingLeft="70dp"
+            android:paddingRight="70dp"
+            android:layout_gravity="center_horizontal"
+            android:paddingTop="12dp" />
 
         <TextView android:id="@+id/link_signup"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
-            android:textColor="@color/monsoon"
-            android:text="No account yet? Press here!"
+            android:textColor="@color/black"
+            android:text="Don't have an account yet? Press here!"
             android:gravity="center"
             android:textSize="16dip"/>
 

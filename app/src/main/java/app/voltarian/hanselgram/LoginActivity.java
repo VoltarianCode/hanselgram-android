@@ -2,13 +2,19 @@ package app.voltarian.hanselgram;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatEditText;
 import android.util.Log;
 
 import android.content.Intent;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,8 +29,8 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
 
-    @Bind(R.id.login_username) EditText _usernameText;
-    @Bind(R.id.input_password) EditText _passwordText;
+    @Bind(R.id.login_username) AppCompatEditText _usernameText;
+    @Bind(R.id.input_password) AppCompatEditText _passwordText;
     @Bind(R.id.btn_login) Button _loginButton;
     @Bind(R.id.link_signup) TextView _signupLink;
 
@@ -33,6 +39,28 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+
+
+
+        _passwordText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+                if(keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN){
+                    login();
+                }
+                return false;
+            }
+        });
+
+        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linear_layout_login);
+        linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+            }
+        });
 
         _loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -153,6 +181,21 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         return valid;
+    }
+/*
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.linear_layout_login || v.getId() == R.id.logo_login){
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+    }
+
+    */
+
+    @Override
+    public void onPostCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
+        super.onPostCreate(savedInstanceState, persistentState);
     }
 }
 
