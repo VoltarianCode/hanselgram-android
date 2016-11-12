@@ -33,7 +33,7 @@
             android:name=".SignupActivity"
             android:parentActivityName=".LoginActivity"
             android:theme="@style/AppTheme.Dark" />
-
+        <activity android:name=".UserFeedActivity"></activity>
     </application>
 
 </manifest>
