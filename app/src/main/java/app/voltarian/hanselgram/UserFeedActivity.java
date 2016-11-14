@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -23,7 +24,7 @@ import com.parse.ProgressCallback;
 
 import java.util.List;
 
-public class UserFeedActivity extends AppCompatActivity {
+public class UserFeedActivity extends AppCompatActivity implements View.OnLongClickListener{
 
     ProgressDialog progressDialog;
     LinearLayout linearLayout;
@@ -89,5 +90,12 @@ public class UserFeedActivity extends AppCompatActivity {
 
 
         //imageView.setImageDrawable();
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+
+
+        return false;
     }
 }

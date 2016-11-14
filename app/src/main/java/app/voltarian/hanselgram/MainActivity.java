@@ -65,8 +65,8 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.add_pic:
                 Log.i("Menu Item Selected: ", "Add Picture");
-                progressDialog.show();
                 requestPicture();
+                Toast.makeText(MainActivity.this, "Uploading to Timeline", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.logout:
                 Log.i("Menu Item Selected: ", "Log Out");
@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 20, stream);
                 byte [] byteArray = stream.toByteArray();
                 ParseFile file = new ParseFile("image.png", byteArray);
                 ParseObject object = new ParseObject("Image");
@@ -197,15 +197,24 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             Toast.makeText(MainActivity.this, "Failed to Add Image, Check Internet Connection", Toast.LENGTH_LONG).show();
                         }
-                        progressDialog.dismiss();
                     }
                 });
 
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (OutOfMemoryError error){
+                error.printStackTrace();
+                Toast.makeText(MainActivity.this, "Failed to Add Image, Using Too Much RAM", Toast.LENGTH_LONG).show();
+
             }
         }
 
 
+    }
+    @Override
+    public void onBackPressed() {
+        // Disable going back to the MainActivity
+        progressDialog.dismiss();
+        moveTaskToBack(true);
     }
 }

@@ -109,6 +109,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
+            android:padding="5dp"
             android:gravity="center"
             android:textColor="@color/black"
             android:text="Already a member? Login"

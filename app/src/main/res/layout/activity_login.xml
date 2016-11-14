@@ -69,6 +69,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:textColor="@color/black"
+            android:padding="5dp"
             android:text="Don't have an account yet? Press here!"
             android:gravity="center"
             android:textSize="16dip"/>
