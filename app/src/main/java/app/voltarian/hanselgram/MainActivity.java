@@ -1,6 +1,5 @@
 package app.voltarian.hanselgram;
 
-import android.*;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -27,7 +26,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -45,9 +43,10 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayList<String> users;
     ProgressDialog progressDialog;
+    private static final String TAG = "MainActivity";
+
 
     protected static boolean authenticated;
-    protected static SharedPreferences sharedPreferences;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -70,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.logout:
                 Log.i("Menu Item Selected: ", "Log Out");
-                sharedPreferences.edit().putBoolean("authenticated", false).apply();
                 ParseUser.getCurrentUser().logOut();
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(intent);
@@ -91,8 +89,6 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         setContentView(R.layout.activity_main);
         users = new ArrayList<String>();
-        sharedPreferences = this.getSharedPreferences("app.voltarian.hanselgram", Context.MODE_PRIVATE);
-        authenticated = sharedPreferences.getBoolean("authenticated", false);
 
         progressDialog = new ProgressDialog(MainActivity.this,
                 R.style.AppTheme_Dark_Dialog);
@@ -100,14 +96,14 @@ public class MainActivity extends AppCompatActivity {
         progressDialog.setMessage("Loading Resources...");
 
 
-        if (!authenticated && ParseUser.getCurrentUser() == null){
+        if (ParseUser.getCurrentUser() == null){
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
         }
 
 
-        if (ParseUser.getCurrentUser() != null && authenticated) {
+        if (ParseUser.getCurrentUser() != null) {
             final ListView userListView = (ListView) findViewById(R.id.user_listview);
 
             userListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -147,6 +143,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
+        Log.d(TAG, "Activity Created and Set Up");
+
     }
 
     public void requestPicture (){
@@ -177,12 +175,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+
         if (requestCode == 1 && resultCode == RESULT_OK && data != null){
+
             Uri selectedImage = data.getData();
+
             try {
+
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 20, stream);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream);
                 byte [] byteArray = stream.toByteArray();
                 ParseFile file = new ParseFile("image.png", byteArray);
                 ParseObject object = new ParseObject("Image");
@@ -201,8 +204,11 @@ public class MainActivity extends AppCompatActivity {
                 });
 
             } catch (IOException e) {
+
                 e.printStackTrace();
+
             } catch (OutOfMemoryError error){
+
                 error.printStackTrace();
                 Toast.makeText(MainActivity.this, "Failed to Add Image, Using Too Much RAM", Toast.LENGTH_LONG).show();
 
@@ -216,5 +222,12 @@ public class MainActivity extends AppCompatActivity {
         // Disable going back to the MainActivity
         progressDialog.dismiss();
         moveTaskToBack(true);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "Activity Destroyed");
+
     }
 }

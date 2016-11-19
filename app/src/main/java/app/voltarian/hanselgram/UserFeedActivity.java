@@ -28,25 +28,45 @@ public class UserFeedActivity extends AppCompatActivity implements View.OnLongCl
 
     ProgressDialog progressDialog;
     LinearLayout linearLayout;
+    String activeUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_feed);
-        progressDialog = new ProgressDialog(UserFeedActivity.this,
-                R.style.AppTheme_Dark_Dialog);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Loading Images...");
-        progressDialog.show();
 
-        linearLayout = (LinearLayout) findViewById(R.id.user_feed_linear_layout);
+        showProgressDialog();
 
 
         Intent intent = getIntent();
-        String activeUsername = intent.getStringExtra("username");
+        activeUsername = intent.getStringExtra("username");
 
-        getSupportActionBar().setTitle(activeUsername + "' Feed");
+        if (activeUsername.toCharArray()[activeUsername.length() - 1] == 's'){
 
+            getSupportActionBar().setTitle(activeUsername + "' Feed");
+
+        } else {
+
+            getSupportActionBar().setTitle(activeUsername + "s' Feed");
+
+        }
+
+        fetchUserFeed();
+
+        //imageView.setImageDrawable();
+    }
+
+
+
+    @Override
+    public boolean onLongClick(View v) {
+
+        return false;
+    }
+
+
+
+    public void fetchUserFeed(){
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Image");
 
         query.whereEqualTo("username", activeUsername);
@@ -79,23 +99,27 @@ public class UserFeedActivity extends AppCompatActivity implements View.OnLongCl
                             });
                         }
                     }
-                    Toast.makeText(UserFeedActivity.this, "Images Found", Toast.LENGTH_LONG).show();
+                    Toast.makeText(UserFeedActivity.this, Integer.toString(objects.size()) + " Images Found", Toast.LENGTH_LONG).show();
 
                 } else {
-                    Toast.makeText(UserFeedActivity.this, "Failed to Find Images, Check Internet Connection", Toast.LENGTH_LONG).show();
+                    Toast.makeText(UserFeedActivity.this, "No Images Found", Toast.LENGTH_LONG).show();
                 }
                 progressDialog.dismiss();
             }
         });
-
-
-        //imageView.setImageDrawable();
     }
 
-    @Override
-    public boolean onLongClick(View v) {
 
 
-        return false;
+    public void showProgressDialog(){
+        progressDialog = new ProgressDialog(UserFeedActivity.this,
+                R.style.AppTheme_Dark_Dialog);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Loading Images...");
+        progressDialog.show();
+
+        linearLayout = (LinearLayout) findViewById(R.id.user_feed_linear_layout);
     }
+
+
 }

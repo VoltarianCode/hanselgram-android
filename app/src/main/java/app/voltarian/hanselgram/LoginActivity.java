@@ -82,6 +82,9 @@ public class LoginActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
             }
         });
+
+        Log.d(TAG, "Activity Created and Set Up");
+
     }
 
     public void login() {
@@ -108,8 +111,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void done(ParseUser user, ParseException e) {
                 if (e == null){
-                    MainActivity.authenticated = true;
-                    MainActivity.sharedPreferences.edit().putBoolean("authenticated", true).apply();
                     progressDialog.dismiss();
                     onLoginSuccess();
 
@@ -143,6 +144,8 @@ public class LoginActivity extends AppCompatActivity {
     public void onLoginSuccess() {
         _loginButton.setEnabled(true);
         Intent intent = new Intent(this, MainActivity.class);
+
+        //startActivityIfNeeded(intent, 0);
         startActivity(intent);
         finish();
         overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
@@ -200,6 +203,12 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onPostCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
         super.onPostCreate(savedInstanceState, persistentState);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "Activity Destroyed");
     }
 }
 

@@ -110,8 +110,6 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    MainActivity.authenticated = true;
-                    MainActivity.sharedPreferences.edit().putBoolean("authenticated", true).apply();
                     onSignupSuccess();
                 } else {
                     Toast.makeText(SignupActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
@@ -200,6 +198,13 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "Activity Destroyed");
 
     }
 }
