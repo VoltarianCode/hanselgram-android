@@ -81,6 +81,33 @@ public class UserFeedActivity extends AppCompatActivity implements View.OnLongCl
                         for (ParseObject object: objects){
                             ParseFile file = (ParseFile) object.get("image");
 
+                            // Using the foreground getData method to maintain the order of the
+                            // images in the linear layout. Getting it in background and using callbacks
+                            // gave nearly random order each time.
+
+                            byte [] data = new byte[0];
+                            try {
+                                data = file.getData();
+                            } catch (ParseException e1) {
+                                e1.printStackTrace();
+                            }
+                            Bitmap b = BitmapFactory.decodeByteArray(data, 0, data.length);
+                            ImageView imageView = new ImageView(getApplicationContext());
+                            imageView.setLayoutParams(new ViewGroup.LayoutParams(
+                                    ViewGroup.LayoutParams.MATCH_PARENT,
+                                    ViewGroup.LayoutParams.WRAP_CONTENT
+                            ));
+                            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                            float density = getApplicationContext().getResources().getDisplayMetrics().density;
+                            lp.setMargins(Math.round(density*10), Math.round(density*10), Math.round(density*10), Math.round(density*10));
+                            imageView.setLayoutParams(lp);
+
+
+                            imageView.setImageBitmap(b);
+                            linearLayout.addView(imageView);
+
+
+                            /*
                             file.getDataInBackground(new GetDataCallback() {
                                 @Override
                                 public void done(byte[] data, ParseException e) {
@@ -97,6 +124,7 @@ public class UserFeedActivity extends AppCompatActivity implements View.OnLongCl
                                     }
                                 }
                             });
+                            */
                         }
                     }
                     Toast.makeText(UserFeedActivity.this, Integer.toString(objects.size()) + " Images Found", Toast.LENGTH_LONG).show();
