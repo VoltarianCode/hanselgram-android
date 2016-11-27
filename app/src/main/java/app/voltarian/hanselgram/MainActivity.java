@@ -185,9 +185,11 @@ public class MainActivity extends AppCompatActivity {
 
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream);
+                bitmap.compress(Bitmap.CompressFormat.WEBP, 80, stream);
 
                 // Need to make the Bitmap mutable, then downscale large images (4096x4096 is max)
+                // Get screen size, then stretch the image to that size.
+                // 
                 /*
                 if (bitmap.getWidth() > 1440){
                     bitmap.setHeight(bitmap.getHeight()/2);
@@ -195,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 */
                 byte [] byteArray = stream.toByteArray();
-                ParseFile file = new ParseFile("image.png", byteArray);
+                ParseFile file = new ParseFile("image.webp", byteArray);
                 ParseObject object = new ParseObject("Image");
                 object.put("image", file);
                 object.put("username", ParseUser.getCurrentUser().getUsername());

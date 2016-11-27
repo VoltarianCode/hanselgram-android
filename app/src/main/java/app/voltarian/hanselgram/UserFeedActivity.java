@@ -53,6 +53,9 @@ public class UserFeedActivity extends AppCompatActivity implements View.OnLongCl
 
         fetchUserFeed();
 
+
+
+
         //imageView.setImageDrawable();
     }
 
@@ -88,23 +91,32 @@ public class UserFeedActivity extends AppCompatActivity implements View.OnLongCl
                             byte [] data = new byte[0];
                             try {
                                 data = file.getData();
+                                Bitmap b = BitmapFactory.decodeByteArray(data, 0, data.length);
+                                ImageView imageView = new ImageView(getApplicationContext());
+                                imageView.setLayoutParams(new ViewGroup.LayoutParams(
+                                        ViewGroup.LayoutParams.MATCH_PARENT,
+                                        ViewGroup.LayoutParams.WRAP_CONTENT
+                                ));
+                                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                                float density = getApplicationContext().getResources().getDisplayMetrics().density;
+                                lp.setMargins(Math.round(density*10), Math.round(density*10), Math.round(density*10), Math.round(density*10));
+                                imageView.setLayoutParams(lp);
+
+                                imageView.setImageBitmap(b);
+                                linearLayout.addView(imageView);
+
                             } catch (ParseException e1) {
+
                                 e1.printStackTrace();
+
+                            } catch (OutOfMemoryError e2){
+
+                                e2.printStackTrace();
+                                Toast.makeText(UserFeedActivity.this, "Ran out of RAM", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                startActivity(intent);
+
                             }
-                            Bitmap b = BitmapFactory.decodeByteArray(data, 0, data.length);
-                            ImageView imageView = new ImageView(getApplicationContext());
-                            imageView.setLayoutParams(new ViewGroup.LayoutParams(
-                                    ViewGroup.LayoutParams.MATCH_PARENT,
-                                    ViewGroup.LayoutParams.WRAP_CONTENT
-                            ));
-                            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                            float density = getApplicationContext().getResources().getDisplayMetrics().density;
-                            lp.setMargins(Math.round(density*10), Math.round(density*10), Math.round(density*10), Math.round(density*10));
-                            imageView.setLayoutParams(lp);
-
-
-                            imageView.setImageBitmap(b);
-                            linearLayout.addView(imageView);
 
 
                             /*
@@ -127,10 +139,10 @@ public class UserFeedActivity extends AppCompatActivity implements View.OnLongCl
                             */
                         }
                     }
-                    Toast.makeText(UserFeedActivity.this, Integer.toString(objects.size()) + " Images Found", Toast.LENGTH_LONG).show();
+                    Toast.makeText(UserFeedActivity.this, Integer.toString(objects.size()) + " Images Found", Toast.LENGTH_SHORT).show();
 
                 } else {
-                    Toast.makeText(UserFeedActivity.this, "No Images Found", Toast.LENGTH_LONG).show();
+                    Toast.makeText(UserFeedActivity.this, "No Images Found", Toast.LENGTH_SHORT).show();
                 }
                 progressDialog.dismiss();
             }
