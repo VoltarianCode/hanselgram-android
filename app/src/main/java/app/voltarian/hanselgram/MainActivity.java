@@ -197,6 +197,10 @@ public class MainActivity extends AppCompatActivity {
                 int height = mutableBitmap.getHeight();
                 int width = mutableBitmap.getWidth();
 
+                // TODO SCALE IT BASED ON USER'S SCREEN SIZE
+                // maybe compress only if the image is large, if its already optimized for web
+                // leave it alone, send lossless png
+                
 
                 if (width > 3000){
                     mutableBitmap = getResizedBitmap(mutableBitmap, width/3, height/3);
@@ -207,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                mutableBitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream);
+                mutableBitmap.compress(Bitmap.CompressFormat.WEBP, 80, stream);
                 byte [] byteArray = stream.toByteArray();
                 ParseFile file = new ParseFile("image.webp", byteArray);
                 ParseObject object = new ParseObject("Image");
