@@ -2,9 +2,7 @@ package app.voltarian.hanselgram;
 
 import android.Manifest;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -12,7 +10,6 @@ import android.graphics.Matrix;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -269,7 +266,6 @@ public class MainActivity extends AppCompatActivity {
             // This file will not be a image, it will store the raw image data.
             File file = File.createTempFile("temp.tmp", null, getApplicationContext().getCacheDir());
             //Open an RandomAccessFile
-            //Make sure you have added uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
             //into AndroidManifest.xml file
             RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rw");
 

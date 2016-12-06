@@ -97,9 +97,9 @@ public class UserFeedActivity extends AppCompatActivity implements View.OnLongCl
                                         ViewGroup.LayoutParams.MATCH_PARENT,
                                         ViewGroup.LayoutParams.WRAP_CONTENT
                                 ));
-                                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                                 float density = getApplicationContext().getResources().getDisplayMetrics().density;
-                                lp.setMargins(Math.round(density*10), Math.round(density*10), Math.round(density*10), Math.round(density*10));
+                                lp.setMargins(Math.round(density*10), Math.round(density*10), Math.round(density*10), Math.round(density*20));
                                 imageView.setLayoutParams(lp);
 
                                 imageView.setImageBitmap(b);
