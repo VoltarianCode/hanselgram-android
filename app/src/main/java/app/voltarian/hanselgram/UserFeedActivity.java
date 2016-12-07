@@ -47,14 +47,11 @@ public class UserFeedActivity extends AppCompatActivity implements View.OnLongCl
 
         } else {
 
-            getSupportActionBar().setTitle(activeUsername + "s' Feed");
+            getSupportActionBar().setTitle(activeUsername + "'s Feed");
 
         }
 
         fetchUserFeed();
-
-
-
 
         //imageView.setImageDrawable();
     }
@@ -139,7 +136,7 @@ public class UserFeedActivity extends AppCompatActivity implements View.OnLongCl
                             */
                         }
                     }
-                    Toast.makeText(UserFeedActivity.this, Integer.toString(objects.size()) + " Images Found", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(UserFeedActivity.this, Integer.toString(objects.size()) + " Images Found", Toast.LENGTH_SHORT).show();
 
                 } else {
                     Toast.makeText(UserFeedActivity.this, "No Images Found", Toast.LENGTH_SHORT).show();
