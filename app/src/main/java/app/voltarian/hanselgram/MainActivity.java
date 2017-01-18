@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -49,9 +50,6 @@ public class MainActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
     private static final String TAG = "MainActivity";
 
-
-    protected static boolean authenticated;
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -66,11 +64,6 @@ public class MainActivity extends AppCompatActivity {
         super.onOptionsItemSelected(item);
 
         switch (item.getItemId()) {
-            case R.id.add_pic:
-                Log.i("Menu Item Selected: ", "Add Picture");
-                requestPicture();
-                Toast.makeText(MainActivity.this, "Uploading to Timeline", Toast.LENGTH_SHORT).show();
-                return true;
             case R.id.logout:
                 Log.i("Menu Item Selected: ", "Log Out");
                 ParseUser.getCurrentUser().logOut();
@@ -100,12 +93,37 @@ public class MainActivity extends AppCompatActivity {
         progressDialog.setMessage("Loading Resources...");
 
 
+
         if (ParseUser.getCurrentUser() == null){
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
         }
 
+        //fetchUserListview();
+
+
+
+        ParseAnalytics.trackAppOpenedInBackground(getIntent());
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ConfirmationActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+
+        Log.d(TAG, "Activity Created and Set Up");
+
+    }
+
+    private void fetchUserListview(){
+
+        users.clear();
 
         if (ParseUser.getCurrentUser() != null) {
             final ListView userListView = (ListView) findViewById(R.id.user_listview);
@@ -144,102 +162,9 @@ public class MainActivity extends AppCompatActivity {
             });
 
         }
-
-
-        ParseAnalytics.trackAppOpenedInBackground(getIntent());
-        Log.d(TAG, "Activity Created and Set Up");
-
     }
 
-    public void requestPicture (){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
-                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-            }
-        } else {
-            getPicture();
-        }
-    }
 
-    public void getPicture(){
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, 1);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 1){
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                getPicture();
-            }
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-
-        if (requestCode == 1 && resultCode == RESULT_OK && data != null){
-
-            Uri selectedImage = data.getData();
-
-            try {
-
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
-
-                Bitmap mutableBitmap = convertToMutable(bitmap);
-
-                int height = mutableBitmap.getHeight();
-                int width = mutableBitmap.getWidth();
-
-                // TODO SCALE IT BASED ON USER'S SCREEN SIZE
-                // maybe compress only if the image is large, if its already optimized for web
-                // leave it alone, send lossless png
-                
-
-                if (width > 3000){
-                    mutableBitmap = getResizedBitmap(mutableBitmap, width/3, height/3);
-                    //mutableBitmap.setWidth(mutableBitmap.getWidth()/3);
-                } else if (width > 2000){
-                    mutableBitmap = getResizedBitmap(mutableBitmap, width/2, height/2);
-                    //mutableBitmap.setWidth(mutableBitmap.getWidth()/2);
-                }
-
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                mutableBitmap.compress(Bitmap.CompressFormat.WEBP, 80, stream);
-                byte [] byteArray = stream.toByteArray();
-                ParseFile file = new ParseFile("image.webp", byteArray);
-                ParseObject object = new ParseObject("Image");
-                object.put("image", file);
-                object.put("username", ParseUser.getCurrentUser().getUsername());
-                object.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if (e == null ){
-                            Toast.makeText(MainActivity.this, "Image Added to Timeline", Toast.LENGTH_LONG).show();
-
-                        } else {
-                            Toast.makeText(MainActivity.this, "Failed to Add Image, Check Internet Connection", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-
-            } catch (IOException e) {
-
-                e.printStackTrace();
-
-            } catch (OutOfMemoryError error){
-
-                error.printStackTrace();
-                Toast.makeText(MainActivity.this, "Failed to Add Image, Using Too Much RAM", Toast.LENGTH_LONG).show();
-
-            }
-        }
-
-
-    }
     @Override
     public void onBackPressed() {
         // Disable going back to the MainActivity
@@ -250,74 +175,24 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d(TAG, "Activity Destroyed");
+        Log.d(TAG, "Main Activity Destroyed");
 
     }
-    /**
-     * Converts an immutable bitmap to a mutable one. This operation doesn't allocate
-     * any additional memory. Should be memory efficient.
-     *
-     * @param imgIn - Source image. It will be released, and should not be used more
-     * @return a mutable copy of imgIn.
-     */
-    public Bitmap convertToMutable(Bitmap imgIn) {
-        try {
-            //this is the file going to use temporally to save the bytes.
-            // This file will not be a image, it will store the raw image data.
-            File file = File.createTempFile("temp.tmp", null, getApplicationContext().getCacheDir());
-            //Open an RandomAccessFile
-            //into AndroidManifest.xml file
-            RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rw");
 
-            // get the width and height of the source bitmap.
-            int width = imgIn.getWidth();
-            int height = imgIn.getHeight();
-            Bitmap.Config type = imgIn.getConfig();
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "Main Activity Paused");
 
-            //Copy the byte to the file
-            //Assume source bitmap loaded using options.inPreferredConfig = Config.ARGB_8888;
-            FileChannel channel = randomAccessFile.getChannel();
-            MappedByteBuffer map = channel.map(FileChannel.MapMode.READ_WRITE, 0, imgIn.getRowBytes()*height);
-            imgIn.copyPixelsToBuffer(map);
-            //recycle the source bitmap, this will be no longer used.
-            imgIn.recycle();
-            System.gc();// try to force the bytes from the imgIn to be released
-
-            //Create a new bitmap to load the bitmap again. Probably the memory will be available.
-            imgIn = Bitmap.createBitmap(width, height, type);
-            map.position(0);
-            //load it back from temporary
-            imgIn.copyPixelsFromBuffer(map);
-            //close the temporary file and channel , then delete that also
-            channel.close();
-            randomAccessFile.close();
-
-            // delete the temp file
-            file.delete();
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return imgIn;
     }
 
-    public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
-        int width = bm.getWidth();
-        int height = bm.getHeight();
-        float scaleWidth = ((float) newWidth) / width;
-        float scaleHeight = ((float) newHeight) / height;
-        // CREATE A MATRIX FOR THE MANIPULATION
-        Matrix matrix = new Matrix();
-        // RESIZE THE BIT MAP
-        matrix.postScale(scaleWidth, scaleHeight);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fetchUserListview();
+        Log.d(TAG, "Main Activity Resumed");
 
-        // "RECREATE" THE NEW BITMAP
-        Bitmap resizedBitmap = Bitmap.createBitmap(
-                bm, 0, 0, width, height, matrix, false);
-        bm.recycle();
-        return resizedBitmap;
     }
+
+
 }
