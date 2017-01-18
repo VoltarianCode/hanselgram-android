@@ -119,6 +119,9 @@ public class ConfirmationActivity extends AppCompatActivity {
                 } else if (width > 2000){
                     mutableBitmap = getResizedBitmap(mutableBitmap, width/2, height/2);
                     //mutableBitmap.setWidth(mutableBitmap.getWidth()/2);
+                } else if (width > 1500){
+                    mutableBitmap = getResizedBitmap(mutableBitmap, 2*width/3, 2*height/3);
+                    //mutableBitmap.setWidth(mutableBitmap.getWidth()/2);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
