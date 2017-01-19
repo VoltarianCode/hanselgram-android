@@ -9,6 +9,7 @@
 package app.voltarian.hanselgram;
 
 import android.app.Application;
+import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
 import com.parse.Parse;
@@ -19,7 +20,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 
-public class StarterApplication extends Application {
+public class StarterApplication extends MultiDexApplication {
 
     @Override
     public void onCreate() {

@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,6 +35,13 @@ public class UserFeedActivity extends AppCompatActivity implements View.OnLongCl
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.drawable.logo);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+
+
         setContentView(R.layout.activity_user_feed);
 
         showProgressDialog();
@@ -40,16 +49,7 @@ public class UserFeedActivity extends AppCompatActivity implements View.OnLongCl
 
         Intent intent = getIntent();
         activeUsername = intent.getStringExtra("username");
-
-        if (activeUsername.toCharArray()[activeUsername.length() - 1] == 's'){
-
-            getSupportActionBar().setTitle(activeUsername + "' Feed");
-
-        } else {
-
-            getSupportActionBar().setTitle(activeUsername + "'s Feed");
-
-        }
+        getSupportActionBar().setTitle(activeUsername);
 
         fetchUserFeed();
 
@@ -60,7 +60,6 @@ public class UserFeedActivity extends AppCompatActivity implements View.OnLongCl
 
     @Override
     public boolean onLongClick(View v) {
-
         return false;
     }
 
@@ -146,7 +145,19 @@ public class UserFeedActivity extends AppCompatActivity implements View.OnLongCl
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        // Disable going back to the MainActivity
+        backToMainActivity();
+    }
 
+    public void backToMainActivity(){
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+        overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
+    }
 
     public void showProgressDialog(){
         progressDialog = new ProgressDialog(UserFeedActivity.this,

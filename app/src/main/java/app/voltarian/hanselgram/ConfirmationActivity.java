@@ -3,16 +3,21 @@ package app.voltarian.hanselgram;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.ParseException;
@@ -36,20 +41,34 @@ public class ConfirmationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.drawable.logo);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+
         setContentView(R.layout.activity_confirmation);
-        getSupportActionBar().setTitle("Confirm Upload");
 
 
 
         Button upload = (Button) findViewById(R.id.confirmUploadButton);
         Button cancel = (Button) findViewById(R.id.cancelUploadButton);
 
+        EditText location_from_user = (EditText) findViewById(R.id.location_from_user);
+        location_from_user.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if (i == KeyEvent.KEYCODE_ENTER && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+                    uploadPicture();
+                }
+                return false;
+            }
+        });
+
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+                backToMainActivity();
             }
         });
 
@@ -60,20 +79,26 @@ public class ConfirmationActivity extends AppCompatActivity {
             }
         });
 
-        getPicture();
+        TextView confirmUpload = (TextView) findViewById(R.id.confirm_upload);
+        confirmUpload.setText("Confirm Upload");
+
+        requestPicture();
 
     }
-/*
+
     public void requestPicture (){
+        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
                 requestPermissions(new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+            } else {
+                getPicture();
             }
         } else {
             getPicture();
         }
     }
-    */
+
 
     public void getPicture(){
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -108,18 +133,13 @@ public class ConfirmationActivity extends AppCompatActivity {
                 int height = mutableBitmap.getHeight();
                 int width = mutableBitmap.getWidth();
 
-                // TODO SCALE IT BASED ON USER'S SCREEN SIZE
-                // maybe compress only if the image is large, if its already optimized for web
-                // leave it alone, send lossless png
-
-
                 if (width > 3000){
                     mutableBitmap = getResizedBitmap(mutableBitmap, width/3, height/3);
                     //mutableBitmap.setWidth(mutableBitmap.getWidth()/3);
                 } else if (width > 2000){
                     mutableBitmap = getResizedBitmap(mutableBitmap, width/2, height/2);
                     //mutableBitmap.setWidth(mutableBitmap.getWidth()/2);
-                } else if (width > 1500){
+                } else if (width > 1500 || height > 1500){
                     mutableBitmap = getResizedBitmap(mutableBitmap, 2*width/3, 2*height/3);
                     //mutableBitmap.setWidth(mutableBitmap.getWidth()/2);
                 }
@@ -132,6 +152,8 @@ public class ConfirmationActivity extends AppCompatActivity {
             }
 
 
+        } else {
+            backToMainActivity();
         }
 
 
@@ -146,11 +168,6 @@ public class ConfirmationActivity extends AppCompatActivity {
 
             int height = mutableBitmap.getHeight();
             int width = mutableBitmap.getWidth();
-
-            // TODO SCALE IT BASED ON USER'S SCREEN SIZE
-            // maybe compress only if the image is large, if its already optimized for web
-            // leave it alone, send lossless png
-
 
             if (width > 3000){
                 mutableBitmap = getResizedBitmap(mutableBitmap, width/3, height/3);
@@ -264,5 +281,25 @@ public class ConfirmationActivity extends AppCompatActivity {
                 bm, 0, 0, width, height, matrix, false);
         bm.recycle();
         return resizedBitmap;
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Disable going back to the MainActivity
+        backToMainActivity();
+    }
+
+    public void backToMainActivity(){
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+        overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
     }
 }

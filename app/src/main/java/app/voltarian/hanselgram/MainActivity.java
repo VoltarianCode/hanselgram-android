@@ -23,8 +23,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.vision.text.Text;
 import com.parse.FindCallback;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
@@ -115,6 +117,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        if (ParseUser.getCurrentUser() != null){
+            TextView textView = (TextView) findViewById(R.id.logged_in_as);
+            textView.setText("Logged in as: " + ParseUser.getCurrentUser().getUsername());
+        }
 
 
         Log.d(TAG, "Activity Created and Set Up");
