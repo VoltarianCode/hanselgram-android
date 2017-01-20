@@ -25,25 +25,32 @@ public class StarterApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        try {
 
-        Parse.enableLocalDatastore(this);
+            Parse.enableLocalDatastore(this);
 
-        // GET YOUR OWN PARSE SERVER CREDENTIALS AND ADD THEM HERE
-        Parse.initialize(new Parse.Configuration.Builder(getApplicationContext())
-                .applicationId(getResources().getString(R.string.app_id))
-                .clientKey(getResources().getString(R.string.client_key))
-                .server(getResources().getString(R.string.server_url))
-                .build()
-        );
+            // GET YOUR OWN PARSE SERVER CREDENTIALS AND ADD THEM HERE
+            Parse.initialize(new Parse.Configuration.Builder(getApplicationContext())
+                    .applicationId(getResources().getString(R.string.app_id))
+                    .clientKey(getResources().getString(R.string.client_key))
+                    .server(getResources().getString(R.string.server_url))
+                    .build()
+            );
 
 
+            //ParseUser.enableAutomaticUser();
 
-        //ParseUser.enableAutomaticUser();
+            ParseACL defaultACL = new ParseACL();
+            defaultACL.setPublicReadAccess(true);
+            defaultACL.setPublicWriteAccess(true);
+            ParseACL.setDefaultACL(defaultACL, true);
 
-        ParseACL defaultACL = new ParseACL();
-        defaultACL.setPublicReadAccess(true);
-        defaultACL.setPublicWriteAccess(true);
-        ParseACL.setDefaultACL(defaultACL, true);
+        } catch (OutOfMemoryError e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
     }
 }
