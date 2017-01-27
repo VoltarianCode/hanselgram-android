@@ -4,25 +4,39 @@
     android:id="@+id/activity_user_feed"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="0dp"
     android:paddingBottom="0dp"
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
     android:paddingTop="0dp"
-    tools:context="app.voltarian.hanselgram.UserFeedActivity"
-    android:padding="0dp">
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <LinearLayout
-        android:orientation="vertical"
+    tools:context="app.voltarian.hanselgram.UserFeedActivity">
+
+    <!--
+
+    <ListView
+        android:id="@+id/feed"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/user_feed_linear_layout">
+        android:layout_marginTop="40dp"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="5dp" />
 
-    </LinearLayout>
+-->
 
-</ScrollView>
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:id="@+id/user_feed_linear_layout">
+
+            </LinearLayout>
+
+    </ScrollView>
+
 
 </RelativeLayout>

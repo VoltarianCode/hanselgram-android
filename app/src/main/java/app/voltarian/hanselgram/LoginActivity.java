@@ -1,6 +1,9 @@
 package app.voltarian.hanselgram;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -38,6 +41,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText _passwordText;
     Button _loginButton;
     TextView _signupLink;
+    boolean isConnected;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -50,6 +54,12 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        ConnectivityManager cm =
+                (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
 
         _usernameText = (EditText) findViewById(R.id.login_username);
         _passwordText = (EditText) findViewById(R.id.login_password);
@@ -66,6 +76,11 @@ public class LoginActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        if (!isConnected){
+            Toast.makeText(LoginActivity.this, R.string.connect_to_internet, Toast.LENGTH_LONG).show();
+        }
+
 
         LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linear_layout_login);
         linearLayout.setOnClickListener(new View.OnClickListener() {

@@ -1,11 +1,14 @@
 package app.voltarian.hanselgram;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,6 +34,8 @@ public class UserFeedActivity extends AppCompatActivity implements View.OnLongCl
     ProgressDialog progressDialog;
     LinearLayout linearLayout;
     String activeUsername;
+    boolean isConnected;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,16 +49,26 @@ public class UserFeedActivity extends AppCompatActivity implements View.OnLongCl
 
         setContentView(R.layout.activity_user_feed);
 
-        showProgressDialog();
+
+        ConnectivityManager cm =
+                (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+
 
 
         Intent intent = getIntent();
         activeUsername = intent.getStringExtra("username");
         getSupportActionBar().setTitle(activeUsername);
 
-        fetchUserFeed();
-
-        //imageView.setImageDrawable();
+        if (isConnected){
+            showProgressDialog();
+            fetchUserFeed();
+        } else {
+            Toast.makeText(UserFeedActivity.this, R.string.connect_to_internet, Toast.LENGTH_LONG).show();
+        }
     }
 
 

@@ -1,48 +1,34 @@
 package app.voltarian.hanselgram;
 
-import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
-import android.os.Build;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.vision.text.Text;
 import com.parse.FindCallback;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> users;
     ProgressDialog progressDialog;
     private static final String TAG = "MainActivity";
+    boolean isConnected;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -79,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,16 +82,25 @@ public class MainActivity extends AppCompatActivity {
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Loading Resources...");
 
+        ConnectivityManager cm =
+                (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
 
 
-        if (ParseUser.getCurrentUser() == null){
+        if (ParseUser.getCurrentUser() == null) {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+
+        } else if (!isConnected) {
+
+            Toast.makeText(MainActivity.this, R.string.connect_to_internet, Toast.LENGTH_LONG).show();
         }
 
         //fetchUserListview();
-
 
 
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
@@ -117,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        if (ParseUser.getCurrentUser() != null){
+        if (ParseUser.getCurrentUser() != null) {
             TextView textView = (TextView) findViewById(R.id.logged_in_as);
             textView.setText("Logged in as: " + ParseUser.getCurrentUser().getUsername());
         }
@@ -127,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void fetchUserListview(){
+    private void fetchUserListview() {
 
         users.clear();
 
@@ -155,9 +152,9 @@ public class MainActivity extends AppCompatActivity {
             query.findInBackground(new FindCallback<ParseUser>() {
                 @Override
                 public void done(List<ParseUser> objects, ParseException e) {
-                    if (e == null){
-                        if (objects.size() > 0){
-                            for (ParseUser user: objects){
+                    if (e == null) {
+                        if (objects.size() > 0) {
+                            for (ParseUser user : objects) {
                                 users.add(user.getUsername());
                             }
                         }
@@ -195,7 +192,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        fetchUserListview();
+        if (isConnected){
+            fetchUserListview();
+        }
         Log.d(TAG, "Main Activity Resumed");
 
     }
