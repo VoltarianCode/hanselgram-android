@@ -5,34 +5,55 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="app.voltarian.hanselgram.MainActivity">
-    <TextView
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="16dp"
-        android:id="@+id/logged_in_as"/>
+        android:orientation="vertical">
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="40dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:id="@+id/user_listview" />
+        <TextView
+            android:id="@+id/logged_in_as"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textSize="16sp"
+            android:layout_marginTop="16dp"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/browse_feeds"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:padding="10dp"
+            android:text="@string/feel_free"
+            android:textSize="16sp"
+            android:textColor="@color/black" />
+
+        <ListView
+            android:id="@+id/user_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="40dp" />
+
+    </LinearLayout>
+
+
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:background="@color/black"
-        app:borderWidth="0dp"
         android:layout_margin="@dimen/fab_margin"
+        android:background="@color/black"
         android:src="@drawable/ic_add_a_photo_white"
+        app:backgroundTint="?attr/actionMenuTextColor"
+        app:borderWidth="0dp"
         app:elevation="20dp"
-        app:fabSize="normal"
-        app:backgroundTint="?attr/actionMenuTextColor" />
+        app:fabSize="normal" />
 
 
 </android.support.design.widget.CoordinatorLayout>

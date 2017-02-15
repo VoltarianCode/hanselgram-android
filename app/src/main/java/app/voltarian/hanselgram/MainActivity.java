@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (ParseUser.getCurrentUser() != null) {
             TextView textView = (TextView) findViewById(R.id.logged_in_as);
-            textView.setText("Logged in as: " + ParseUser.getCurrentUser().getUsername());
+            textView.setText("Welcome Back " + ParseUser.getCurrentUser().getUsername() + "!");
         }
 
 

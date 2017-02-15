@@ -15,8 +15,9 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-    <string name="location_prompt">Enter the location the photo was taken at, try make it a Google Maps friendly name</string>
+    <string name="location_prompt">Where was this taken?  (optional)</string>
     <string name="caption_prompt">Enter a thoughtful caption for your image</string>
+    <string name="feel_free">Feel free to browse the feeds of these Hanselgram users:</string>
 
 
 </resources>
