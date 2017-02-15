@@ -12,15 +12,16 @@
     <TextView
         android:id="@+id/confirm_upload"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="5dp"
+        android:layout_weight="1"
         android:textColor="@color/black"
         android:textSize="20dp" />
 
     <ImageView
         android:id="@+id/image_for_upload"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
         android:layout_weight="5"
@@ -29,14 +30,14 @@
     <TextView
         android:id="@+id/location_prompt"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:text="@string/location_prompt" />
 
     <EditText
         android:id="@+id/location_from_user"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_centerHorizontal="true"
         android:layout_weight="1"
         android:ems="20"
@@ -47,15 +48,15 @@
     <TextView
         android:id="@+id/caption_prompt"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_height="0dp"
         android:layout_marginTop="10dp"
+        android:layout_weight="1"
         android:text="@string/caption_prompt" />
 
     <EditText
         android:id="@+id/caption_from_user"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_centerHorizontal="true"
         android:layout_weight="1"
         android:ems="20"
@@ -65,7 +66,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_margin="20dp"
         android:layout_marginTop="20dp"
         android:layout_weight="1"

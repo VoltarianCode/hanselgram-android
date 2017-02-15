@@ -96,7 +96,6 @@ public class UserFeedActivity extends AppCompatActivity implements View.OnLongCl
         //query.setLimit(5);
         query.whereEqualTo("username", activeUsername);
         query.orderByDescending("createdAt");
-
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
@@ -105,18 +104,51 @@ public class UserFeedActivity extends AppCompatActivity implements View.OnLongCl
                         Log.d("Images Found: ", Integer.toString(objects.size()));
                         for (ParseObject object: objects){
 
-                            ParseFile file = (ParseFile) object.get("image");
-                            Date createdAt = (Date) object.getCreatedAt();
-                            String caption = (String) object.get("caption");
-                            String location = (String) object.get("location");
-
-
+                            final ParseFile file = (ParseFile) object.get("image");
+                            final Date createdAt = (Date) object.getCreatedAt();
+                            final String caption = (String) object.get("caption");
+                            final String location = (String) object.get("location");
 
                             // Using the foreground getData method to maintain the order of the
                             // images in the linear layout. Getting it in background and using callbacks
                             // gave nearly random order each time.
 
-                            byte [] data = new byte[0];
+
+
+                            Thread thread = new Thread (){
+                                @Override
+                                public void run(){
+                                    try {
+                                        byte [] data = new byte[0];
+                                        data = file.getData();
+                                        Bitmap b = BitmapFactory.decodeByteArray(data, 0, data.length);
+                                        Image image = new Image(b, location, caption, createdAt);
+                                        images.add(image);
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                arrayAdapter.notifyDataSetChanged();
+                                            }
+                                        });
+
+
+                                    } catch (ParseException e1) {
+
+                                        e1.printStackTrace();
+
+                                    } catch (OutOfMemoryError e2){
+
+                                        e2.printStackTrace();
+                                        Toast.makeText(UserFeedActivity.this, "Ran out of RAM", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                        startActivity(intent);
+
+                                    }
+                                }
+                            };
+
+                            thread.start();
+                            /*
                             try {
                                 data = file.getData();
                                 Bitmap b = BitmapFactory.decodeByteArray(data, 0, data.length);
@@ -136,6 +168,7 @@ public class UserFeedActivity extends AppCompatActivity implements View.OnLongCl
                                 startActivity(intent);
 
                             }
+                            */
 
                             /*
                             ParseFile file = (ParseFile) object.get("image");
