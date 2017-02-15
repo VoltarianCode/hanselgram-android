@@ -115,6 +115,30 @@ public class UserFeedActivity extends AppCompatActivity implements View.OnLongCl
 
 
 
+                            try {
+                                byte [] data = new byte[0];
+                                data = file.getData();
+                                Bitmap b = BitmapFactory.decodeByteArray(data, 0, data.length);
+                                Image image = new Image(b, location, caption, createdAt);
+                                images.add(image);
+                                arrayAdapter.notifyDataSetChanged();
+
+                            } catch (ParseException e1) {
+
+                                e1.printStackTrace();
+
+                            } catch (OutOfMemoryError e2){
+
+                                e2.printStackTrace();
+                                Toast.makeText(UserFeedActivity.this, "Ran out of RAM", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                startActivity(intent);
+
+                            }
+
+
+                            /* manual async
+
                             Thread thread = new Thread (){
                                 @Override
                                 public void run(){
@@ -148,27 +172,9 @@ public class UserFeedActivity extends AppCompatActivity implements View.OnLongCl
                             };
 
                             thread.start();
-                            /*
-                            try {
-                                data = file.getData();
-                                Bitmap b = BitmapFactory.decodeByteArray(data, 0, data.length);
-                                Image image = new Image(b, location, caption, createdAt);
-                                images.add(image);
-                                arrayAdapter.notifyDataSetChanged();
 
-                            } catch (ParseException e1) {
-
-                                e1.printStackTrace();
-
-                            } catch (OutOfMemoryError e2){
-
-                                e2.printStackTrace();
-                                Toast.makeText(UserFeedActivity.this, "Ran out of RAM", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                startActivity(intent);
-
-                            }
                             */
+
 
                             /*
                             ParseFile file = (ParseFile) object.get("image");
