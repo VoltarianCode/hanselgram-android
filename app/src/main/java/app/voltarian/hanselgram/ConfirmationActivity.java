@@ -36,7 +36,8 @@ import java.nio.channels.FileChannel;
 
 public class ConfirmationActivity extends AppCompatActivity {
 
-
+    EditText location_from_user;
+    EditText caption_from_user;
     Uri selectedImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +55,11 @@ public class ConfirmationActivity extends AppCompatActivity {
         Button upload = (Button) findViewById(R.id.confirmUploadButton);
         Button cancel = (Button) findViewById(R.id.cancelUploadButton);
 
-        EditText location_from_user = (EditText) findViewById(R.id.location_from_user);
-        location_from_user.setOnKeyListener(new View.OnKeyListener() {
+        location_from_user = (EditText) findViewById(R.id.location_from_user);
+        caption_from_user = (EditText) findViewById(R.id.caption_from_user);
+
+
+        caption_from_user.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
                 if (i == KeyEvent.KEYCODE_ENTER && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
@@ -170,10 +174,10 @@ public class ConfirmationActivity extends AppCompatActivity {
             int width = mutableBitmap.getWidth();
 
             if (width > 3000){
-                mutableBitmap = getResizedBitmap(mutableBitmap, width/3, height/3);
+                mutableBitmap = getResizedBitmap(mutableBitmap, width/4, height/4);
                 //mutableBitmap.setWidth(mutableBitmap.getWidth()/3);
             } else if (width > 2000){
-                mutableBitmap = getResizedBitmap(mutableBitmap, width/2, height/2);
+                mutableBitmap = getResizedBitmap(mutableBitmap, width/3, height/3);
                 //mutableBitmap.setWidth(mutableBitmap.getWidth()/2);
             }
 
@@ -182,6 +186,8 @@ public class ConfirmationActivity extends AppCompatActivity {
             byte [] byteArray = stream.toByteArray();
             ParseFile file = new ParseFile("image.webp", byteArray);
             ParseObject object = new ParseObject("Image");
+            object.put("location", location_from_user.getText().toString());
+            object.put("caption", caption_from_user.getText().toString());
             object.put("image", file);
             object.put("username", ParseUser.getCurrentUser().getUsername());
             object.saveInBackground(new SaveCallback() {

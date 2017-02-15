@@ -8,46 +8,67 @@
     android:orientation="vertical"
     android:padding="10dp"
     tools:context="app.voltarian.hanselgram.ConfirmationActivity">
+
     <TextView
+        android:id="@+id/confirm_upload"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
         android:layout_marginTop="5dp"
-        android:textSize="20dp"
-        android:id="@+id/confirm_upload"/>
+        android:textColor="@color/black"
+        android:textSize="20dp" />
+
     <ImageView
         android:id="@+id/image_for_upload"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
         android:layout_weight="5"
-        android:layout_centerHorizontal="true"
         app:srcCompat="@android:drawable/ic_menu_report_image" />
 
     <TextView
+        android:id="@+id/location_prompt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/location_prompt"
         android:layout_weight="1"
-        android:text="@string/location_prompt"/>
+        android:text="@string/location_prompt" />
 
     <EditText
         android:id="@+id/location_from_user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:layout_centerHorizontal="true"
+        android:layout_weight="1"
         android:ems="20"
-        android:textColor="@color/black"
         android:inputType="text"
+        android:textColor="@color/black"
+        android:theme="@style/AppTheme.Dark" />
+
+    <TextView
+        android:id="@+id/caption_prompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginTop="10dp"
+        android:text="@string/caption_prompt" />
+
+    <EditText
+        android:id="@+id/caption_from_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_weight="1"
+        android:ems="20"
+        android:inputType="text"
+        android:textColor="@color/black"
         android:theme="@style/AppTheme.Dark" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:layout_weight="1"
         android:layout_marginTop="20dp"
+        android:layout_weight="1"
         android:orientation="horizontal">
 
         <Button

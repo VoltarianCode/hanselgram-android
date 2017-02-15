@@ -1,7 +1,10 @@
 package app.voltarian.hanselgram;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -30,7 +33,7 @@ import java.util.List;
 public class SignupActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "SignupActivity";
     boolean valid;
-
+    boolean isConnected;
 
     EditText _userNameText;
     EditText _emailText;
@@ -43,6 +46,21 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+
+        ConnectivityManager cm =
+                (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if (activeNetwork != null && activeNetwork.isConnectedOrConnecting()){
+            isConnected = true;
+        } else {
+            isConnected = false;
+        }
+
+        if (!isConnected){
+            Toast.makeText(SignupActivity.this, R.string.connect_to_internet, Toast.LENGTH_LONG).show();
+        }
+
 
         _userNameText = (EditText) findViewById(R.id.sign_up_username);
         _emailText = (EditText) findViewById(R.id.signup_email);

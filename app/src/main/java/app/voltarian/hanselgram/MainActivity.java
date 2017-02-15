@@ -86,8 +86,11 @@ public class MainActivity extends AppCompatActivity {
                 (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        isConnected = activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
+        if (activeNetwork != null && activeNetwork.isConnectedOrConnecting()){
+            isConnected = true;
+        } else {
+            isConnected = false;
+        }
 
 
         if (ParseUser.getCurrentUser() == null) {

@@ -7,9 +7,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
-import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatEditText;
 import android.util.Log;
 
 import android.content.Intent;
@@ -30,8 +28,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
-
-import static java.security.AccessController.getContext;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -58,8 +54,11 @@ public class LoginActivity extends AppCompatActivity {
                 (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        isConnected = activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
+        if (activeNetwork != null && activeNetwork.isConnectedOrConnecting()){
+            isConnected = true;
+        } else {
+            isConnected = false;
+        }
 
         _usernameText = (EditText) findViewById(R.id.login_username);
         _passwordText = (EditText) findViewById(R.id.login_password);

@@ -16,5 +16,7 @@
         completions."
     </string>
     <string name="location_prompt">Enter the location the photo was taken at, try make it a Google Maps friendly name</string>
+    <string name="caption_prompt">Enter a thoughtful caption for your image</string>
+
 
 </resources>
